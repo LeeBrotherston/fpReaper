@@ -84,6 +84,8 @@ func main() {
 		},
 	}
 
+	//db := setupDB()
+
 	// handle `/` route
 	http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
 		log.Printf("%v %v ", req.RemoteAddr, req.UserAgent())

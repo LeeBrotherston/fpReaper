@@ -19,6 +19,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 package main
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"log"
 	"strconv"
@@ -31,6 +32,8 @@ import (
 )
 
 func doSniff(device string, fingerprintDBNew map[uint64]string) {
+
+	db := setupDB()
 
 	// Open device
 	// the 0 and true refer to snaplen and promisc mode.  For now we always want these.
@@ -51,7 +54,7 @@ func doSniff(device string, fingerprintDBNew map[uint64]string) {
 
 		// Locate the payload to send the the tlsFingerprint() function
 		payload := packet.ApplicationLayer()
-		fingerprintOutput, _, fpHash := dactyloscopy.TLSFingerprint(payload.Payload(), fingerprintDBNew)
+		fingerprintOutput, fpDetail, fpHash := dactyloscopy.TLSFingerprint(payload.Payload(), fingerprintDBNew)
 
 		// Populate an event struct
 		var event Event
@@ -82,6 +85,24 @@ func doSniff(device string, fingerprintDBNew map[uint64]string) {
 
 		// Some output....
 		log.Printf("%s -> %s : %s : %s", src, dst, fingerprintOutput.FingerprintName, jsonOut)
+		log.Printf("%s %s %s", hex.EncodeToString(fpDetail.Ciphersuite),
+			hex.EncodeToString(fpDetail.Extensions), hex.EncodeToString(fpDetail.RecordTLSVersion))
+		rows, success := sqlSingleShot(db, sqlInsertFingerprintDB,
+			hex.EncodeToString(fpDetail.RecordTLSVersion),
+			hex.EncodeToString(fpDetail.TLSVersion),
+			hex.EncodeToString(fpDetail.Ciphersuite),
+			hex.EncodeToString(fpDetail.Compression),
+			hex.EncodeToString(fpDetail.Extensions),
+			hex.EncodeToString(fpDetail.ECurves),
+			hex.EncodeToString(fpDetail.SigAlg),
+			hex.EncodeToString(fpDetail.EcPointFmt),
+			fpDetail.Grease,
+			hex.EncodeToString(fpDetail.SupportedVersions),
+			hex.EncodeToString(packet.Data()))
+		if success == true {
+			log.Printf("Added %d rows", rows)
+		}
+
 	}
 
 }

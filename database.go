@@ -10,58 +10,67 @@ import (
 // Created without timezone as we're going to convert to UTC before storage
 // in the database.  This also makes the field immutable which is way better
 // for indexing
-const sqlCreateFingerprintDB = `
-        /* Create the table */
-        CREATE TABLE IF NOT EXISTS fingerprints (
-			injesttime TIMESTAMP DEFAULT NOW(),
-			ip varchar(48),
-		);
-        `
-
 const sqlCreateWebConnect = `
 		CREATE TABLE IF NOT EXISTS www (
-			injesttime TIMESTAMP DEFAULT NOW(),
+			injesttime TIMESTAMP CURRENT_TIMESTAMP,
 			ip varchar(48),
-			useragent text,
+			useragent text
 		);
+`
 
-		CREATE INDEX IF NOT EXISTS idx_ip ON www (ip);
+const sqlCreateFingerprintDB = `
+		CREATE TABLE IF NOT EXISTS fingerprintdb (
+			injesttime TIMESTAMP CURRENT_TIMESTAMP,
+			RecordTLSVersion text,
+			TLSVersion text,
+			Ciphersuite text,
+			CompressionLength text,
+			Compression text,
+			Extensions text,
+			ECurves text,
+			SigAlg text,
+			ECPointFmt text,
+			Grease int,
+			SupportedVersions text,
+			raw blob
+		);
 `
 
 // Prepared statement for inserting into the events table
 // This is intended to make inserts pretty consistent and not particularly subject to
 // problems arising from input sanitization
-const sqlInsertLoginHistory = `
-        /* Create the table */
-        INSERT INTO events (
-			client,
-			clientip,
-			injesttime,
-			timestamp,
-			username,
-			userhash,
-			ip,
-			authsuccess,
-			failtype,
-		)
-          VALUES (
-                ?, ?, ?, ?, ?, ?, ?, ?, ?
-		  );
-		  `
-
 const sqlInsertWebConnect = `
 		INSERT INTO www (
+			injesttime,
 			ip,
 			useragent
 		)
-		VALUES (?, ?);
+		VALUES (CURRENT_TIMESTAMP, ?, ?);
+`
+
+const sqlInsertFingerprintDB = `
+		INSERT INTO fingerprintdb (
+			injesttime,
+			RecordTLSVersion,
+			TLSVersion,
+			Ciphersuite,
+			Compression,
+			Extensions,
+			ECurves,
+			SigAlg,
+			ECPointFmt,
+			Grease,
+			SupportedVersions,
+			raw
+		)
+		VALUES (CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 `
 
 // setupDB sets up.... the DB
 // More specifically it's connects to it, and initializes it if it
 // does not appear to have been already
 func setupDB() *sql.DB {
-	fileName := "sparkly.sqlite"
+	fileName := "reaper.sqlite"
 	db, rowcount := connectDB(fileName)
 	log.Printf("Database init row count: %v\n", rowcount)
 	if db == nil {
@@ -93,7 +102,7 @@ func connectDB(fileName string) (*sql.DB, int64) {
 
 	// Create the relevant tables if they do not exist, this check is
 	// in the SQL logic
-	retval, retBool := sqlSingleShot(db, sqlCreateFingerprintDB)
+	retval, retBool := sqlSingleShot(db, sqlCreateWebConnect)
 	if retBool == true {
 		retval, retBool = sqlSingleShot(db, sqlCreateFingerprintDB)
 		if retBool == true {

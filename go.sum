@@ -1,9 +1,11 @@
-github.com/LeeBrotherston/dactyloscopy v0.0.0-20210712004441-95e22a08e5a5 h1:lkggdFAYQWuyOdGstjZVFrMCHtKoTo2r124tsKc7b0o=
-github.com/LeeBrotherston/dactyloscopy v0.0.0-20210712004441-95e22a08e5a5/go.mod h1:k+1BHEPQV9NuFSjbafZ8aISkUcuOq4kDHMjh7Vk9VUM=
+github.com/LeeBrotherston/dactyloscopy v0.0.0-20211003024404-e1cf6d959b6e h1:TcKbtd17a57UNBthB8iOhYYct/yvB+o25QnquKQzndg=
+github.com/LeeBrotherston/dactyloscopy v0.0.0-20211003024404-e1cf6d959b6e/go.mod h1:k+1BHEPQV9NuFSjbafZ8aISkUcuOq4kDHMjh7Vk9VUM=
 github.com/google/gopacket v1.1.19 h1:ves8RnFZPGiFnTS0uPQStjwru6uO6h+nlr9j6fL7kF8=
 github.com/google/gopacket v1.1.19/go.mod h1:iJ8V8n6KS+z2U1A8pUwu8bW5SyEMkXJB8Yo/Vo+TKTo=
 github.com/joho/godotenv v1.3.0 h1:Zjp+RcGpHhGlrMbJzXTrZZPrWj+1vfm90La1wgB6Bhc=
 github.com/joho/godotenv v1.3.0/go.mod h1:7hK45KPybAkOC6peb+G5yklZfMxEjkZhHbwpqxOKXbg=
+github.com/mattn/go-sqlite3 v1.14.8 h1:gDp86IdQsN/xWjIEmr9MF6o9mpksUgh0fu+9ByFxzIU=
+github.com/mattn/go-sqlite3 v1.14.8/go.mod h1:NyWgC/yNuGj7Q9rpYnZvas74GogHl5/Z4A/KQRfk6bU=
 github.com/spaolacci/murmur3 v1.1.0 h1:7c1g84S4BPRrfL5Xrdp6fOJ206sU9y293DDHaoy0bLI=
 github.com/spaolacci/murmur3 v1.1.0/go.mod h1:JwIasOWyU6f++ZhiEuf87xNszmSA2myDM2Kzu9HwQUA=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
