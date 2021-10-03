@@ -21,6 +21,7 @@ package main
 import (
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"log"
 	"strconv"
 	"time"
@@ -83,11 +84,15 @@ func doSniff(device string, fingerprintDBNew map[uint64]string) {
 
 		jsonOut, _ := json.Marshal(event)
 
+		connection := fmt.Sprintf("%s:%d", src, event.SrcPort)
+		log.Printf("Conn Info: %s", connection)
+
 		// Some output....
 		log.Printf("%s -> %s : %s : %s", src, dst, fingerprintOutput.FingerprintName, jsonOut)
 		log.Printf("%s %s %s", hex.EncodeToString(fpDetail.Ciphersuite),
 			hex.EncodeToString(fpDetail.Extensions), hex.EncodeToString(fpDetail.RecordTLSVersion))
 		rows, success := sqlSingleShot(db, sqlInsertFingerprintDB,
+			connection,
 			hex.EncodeToString(fpDetail.RecordTLSVersion),
 			hex.EncodeToString(fpDetail.TLSVersion),
 			hex.EncodeToString(fpDetail.Ciphersuite),

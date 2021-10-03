@@ -84,11 +84,18 @@ func main() {
 		},
 	}
 
-	//db := setupDB()
+	db := setupDB()
 
 	// handle `/` route
 	http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
 		log.Printf("%v %v ", req.RemoteAddr, req.UserAgent())
+		rows, success := sqlSingleShot(db, sqlInsertWebConnect,
+			req.RemoteAddr,
+			req.UserAgent(),
+		)
+		if success == true {
+			log.Printf("Added %d rows", rows)
+		}
 		fmt.Fprint(res, "Hello Custom World!")
 	})
 

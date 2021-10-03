@@ -13,7 +13,7 @@ import (
 const sqlCreateWebConnect = `
 		CREATE TABLE IF NOT EXISTS www (
 			injesttime TIMESTAMP CURRENT_TIMESTAMP,
-			ip varchar(48),
+			connection string,
 			useragent text
 		);
 `
@@ -21,6 +21,7 @@ const sqlCreateWebConnect = `
 const sqlCreateFingerprintDB = `
 		CREATE TABLE IF NOT EXISTS fingerprintdb (
 			injesttime TIMESTAMP CURRENT_TIMESTAMP,
+			connection string,
 			RecordTLSVersion text,
 			TLSVersion text,
 			Ciphersuite text,
@@ -42,7 +43,7 @@ const sqlCreateFingerprintDB = `
 const sqlInsertWebConnect = `
 		INSERT INTO www (
 			injesttime,
-			ip,
+			connection,
 			useragent
 		)
 		VALUES (CURRENT_TIMESTAMP, ?, ?);
@@ -51,6 +52,7 @@ const sqlInsertWebConnect = `
 const sqlInsertFingerprintDB = `
 		INSERT INTO fingerprintdb (
 			injesttime,
+			connection,
 			RecordTLSVersion,
 			TLSVersion,
 			Ciphersuite,
@@ -63,7 +65,7 @@ const sqlInsertFingerprintDB = `
 			SupportedVersions,
 			raw
 		)
-		VALUES (CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+		VALUES (CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 `
 
 // setupDB sets up.... the DB
