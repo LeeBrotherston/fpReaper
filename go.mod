@@ -7,5 +7,5 @@ require (
 	github.com/google/gopacket v1.1.19
 	github.com/joho/godotenv v1.4.0
 	github.com/mattn/go-sqlite3 v1.14.8
-	golang.org/x/sys v0.0.0-20211003122950-b1ebd4e1001c // indirect
+	golang.org/x/sys v0.1.0 // indirect
 )
